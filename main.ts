@@ -20,4 +20,12 @@ const PLAN = [
   'Edge: flaw-level personalization that generic lead sellers cannot match, and delivery within 1 hour that no freelancer can beat.',
 ].join('\n');
 
+// The gate accepts only UTF-8 text of 1 to 1,000 characters (Unicode code points)
+// that is not all white space, so refuse to write anything else: a plan edited
+// past the limit fails loudly here instead of scoring 0 at the gate.
+const codePoints = [...PLAN].length;
+if (codePoints < 1 || codePoints > 1000 || PLAN.trim().length === 0) {
+  throw new Error(`plan is ${codePoints} code points; the gate takes 1 to 1000, non-blank`);
+}
+
 writeFileSync(join(OUTPUT_DIR, 'entry.txt'), PLAN);
